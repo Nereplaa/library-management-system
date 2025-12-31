@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kutuphane Yonetim Sistemi</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e4e4e4;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
+        header {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            margin-bottom: 40px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        header h1 {
+            text-align: center;
+            font-size: 2.5em;
+            background: linear-gradient(90deg, #e94560, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #e94560, #ff6b6b);
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        nav a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(233,69,96,0.4);
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.1);
+        }
+        .stat-card .icon {
+            font-size: 2em;
+            margin-bottom: 15px;
+            color: #e94560;
+        }
+        .stat-card h3 {
+            font-size: 2.5em;
+            color: #e94560;
+            margin-bottom: 10px;
+        }
+        .stat-card p {
+            color: #aaa;
+            font-size: 1.1em;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            margin-top: 50px;
+        }
+        
+        .flash {
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .flash.success { background: rgba(46,204,113,0.2); border: 1px solid #2ecc71; }
+        .flash.error { background: rgba(231,76,60,0.2); border: 1px solid #e74c3c; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>KUTUPHANE YONETIM SISTEMI</h1>
+            <nav>
+                <a href="/">Ana Sayfa</a>
+                <a href="/kitaplar">Kitaplar</a>
+                <a href="/uyeler">Uyeler</a>
+                <a href="/odunc">Odunc Islemleri</a>
+                <a href="/arama">Arama</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="icon">[KITAP]</div>
+                <h3>{{ kitap_sayisi }}</h3>
+                <p>Toplam Kitap</p>
+            </div>
+            <div class="stat-card">
+                <div class="icon">[UYE]</div>
+                <h3>{{ uye_sayisi }}</h3>
+                <p>Kayitli Uye</p>
+            </div>
+            <div class="stat-card">
+                <div class="icon">[ODUNC]</div>
+                <h3>{{ odunc_sayisi }}</h3>
+                <p>Odunc Verilen</p>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>Kocaeli Saglik ve Teknoloji Universitesi - Programlama Lab I - 2025</p>
+    </footer>
+</body>
+</html>

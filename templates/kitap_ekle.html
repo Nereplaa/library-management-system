@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitap Ekle - Kutuphane</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e4e4e4;
+        }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        header {
+            background: rgba(255,255,255,0.05);
+            padding: 20px 0;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        header h1 { color: #e94560; }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #e94560, #ff6b6b);
+            border-radius: 25px;
+        }
+        
+        .form-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #aaa;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1em;
+        }
+        .form-group input:focus { outline: none; border-color: #e94560; }
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-back {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>[+] Yeni Kitap Ekle</h1>
+        <nav>
+            <a href="/">Ana Sayfa</a>
+            <a href="/kitaplar">Kitaplar</a>
+        </nav>
+    </header>
+    
+    <main class="container">
+        <div class="form-card">
+            <form method="POST" onsubmit="return validateKitapForm()">
+                <div class="form-group">
+                    <label>Kitap Basligi *</label>
+                    <input type="text" name="title" id="title" required minlength="1" maxlength="200" 
+                           placeholder="Orn: Python Programlama" title="Kitap basligi zorunludur">
+                </div>
+                <div class="form-group">
+                    <label>Yazar *</label>
+                    <input type="text" name="author" id="author" required minlength="2" maxlength="100" 
+                           placeholder="Orn: Ahmet Yilmaz" title="Yazar adi zorunludur">
+                </div>
+                <div class="form-group">
+                    <label>ISBN * (10 veya 13 karakter)</label>
+                    <input type="text" name="isbn" id="isbn" required minlength="10" maxlength="17" 
+                           placeholder="Orn: 978-605-1234-56-7 veya 9786051234567"
+                           title="ISBN-10 (10 karakter) veya ISBN-13 (13 karakter, 978/979 ile baslar)"
+                           pattern="[\d\-\s]{10,17}">
+                    <small style="color: #888; font-size: 0.85em;">ISBN-10: 10 rakam | ISBN-13: 978 veya 979 ile baslayan 13 rakam</small>
+                </div>
+                <div class="form-group">
+                    <label>Yayinevi *</label>
+                    <input type="text" name="publisher" id="publisher" required minlength="2" maxlength="100" 
+                           placeholder="Orn: Bilim Yayinlari" title="Yayinevi zorunludur">
+                </div>
+                <div class="form-group">
+                    <label>Yayin Yili * (1900-2100)</label>
+                    <input type="number" name="year" id="year" required min="1900" max="2100" step="1"
+                           placeholder="Orn: 2024" title="Yil 1900-2100 arasi olmali"
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                </div>
+                <div class="form-group">
+                    <label>Sayfa Sayisi * (en az 1)</label>
+                    <input type="number" name="page_count" id="page_count" required min="1" max="99999" step="1"
+                           placeholder="Orn: 450" title="Sayfa sayisi en az 1 olmali"
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                </div>
+                <div class="form-group">
+                    <label>Kategori *</label>
+                    <input type="text" name="category" id="category" required minlength="2" maxlength="50" 
+                           placeholder="Orn: Programlama" title="Kategori zorunludur">
+                </div>
+                <button type="submit" class="btn">Kitap Ekle</button>
+            </form>
+            <script>
+            function validateISBN(isbn) {
+                // Tire ve bosluklari kaldir
+                var temiz = isbn.replace(/[-\s]/g, '').toUpperCase();
+                
+                // ISBN-10 kontrolu
+                if (temiz.length === 10) {
+                    // Ilk 9 karakter rakam olmali
+                    if (!/^\d{9}/.test(temiz)) {
+                        return {valid: false, msg: 'ISBN-10: Ilk 9 karakter rakam olmali!'};
+                    }
+                    // Son karakter rakam veya X olmali
+                    if (!/[\dX]$/.test(temiz)) {
+                        return {valid: false, msg: 'ISBN-10: Son karakter rakam veya X olmali!'};
+                    }
+                    return {valid: true, msg: ''};
+                }
+                // ISBN-13 kontrolu
+                else if (temiz.length === 13) {
+                    // Tum karakterler rakam olmali
+                    if (!/^\d{13}$/.test(temiz)) {
+                        return {valid: false, msg: 'ISBN-13: Tum karakterler rakam olmali!'};
+                    }
+                    // 978 veya 979 ile baslamali
+                    if (!temiz.startsWith('978') && !temiz.startsWith('979')) {
+                        return {valid: false, msg: 'ISBN-13: 978 veya 979 ile baslamali!'};
+                    }
+                    return {valid: true, msg: ''};
+                }
+                else {
+                    return {valid: false, msg: 'ISBN 10 veya 13 karakter olmali! (Girilen: ' + temiz.length + ' karakter)'};
+                }
+            }
+            
+            function validateKitapForm() {
+                var year = document.getElementById('year').value;
+                var page = document.getElementById('page_count').value;
+                var isbn = document.getElementById('isbn').value;
+                
+                // ISBN kontrolu
+                var isbnResult = validateISBN(isbn);
+                if (!isbnResult.valid) {
+                    alert('ISBN Hatasi: ' + isbnResult.msg);
+                    return false;
+                }
+                
+                if (isNaN(year) || year < 1900 || year > 2100) {
+                    alert('Yil 1900-2100 arasi bir sayi olmali!');
+                    return false;
+                }
+                if (isNaN(page) || page < 1) {
+                    alert('Sayfa sayisi en az 1 olmali!');
+                    return false;
+                }
+                return true;
+            }
+            </script>
+            <center><a href="/kitaplar" class="btn-back">< Geri Don</a></center>
+        </div>
+    </main>
+</body>
+</html>

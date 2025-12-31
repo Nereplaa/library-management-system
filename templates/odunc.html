@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odunc Islemleri - Kutuphane</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e4e4e4;
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        header {
+            background: rgba(255,255,255,0.05);
+            padding: 20px 0;
+            margin-bottom: 40px;
+        }
+        header h1 { text-align: center; color: #e94560; }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #e94560, #ff6b6b);
+            border-radius: 25px;
+        }
+        
+        .form-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .form-card h2 { margin-bottom: 25px; color: #e94560; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #aaa;
+        }
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1em;
+        }
+        .btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-right: 10px;
+        }
+        .btn-return { background: linear-gradient(135deg, #3498db, #2980b9); }
+        
+        .flash {
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .flash.success { background: rgba(46,204,113,0.2); border: 1px solid #2ecc71; }
+        .flash.error { background: rgba(231,76,60,0.2); border: 1px solid #e74c3c; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>ODUNC ISLEMLERI</h1>
+            <nav>
+                <a href="/">Ana Sayfa</a>
+                <a href="/kitaplar">Kitaplar</a>
+                <a href="/uyeler">Uyeler</a>
+                <a href="/odunc">Odunc</a>
+                <a href="/arama">Arama</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+        
+        <div class="form-card">
+            <h2>Kitap Odunc Ver</h2>
+            <form method="POST">
+                <input type="hidden" name="islem" value="odunc">
+                <div class="form-group">
+                    <label>Uye Secin</label>
+                    <select name="member_id" required>
+                        <option value="">-- Uye Secin --</option>
+                        {% for uye in uyeler %}
+                        <option value="{{ uye.member_id }}">{{ uye.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Kitap Secin (Musait Olanlar)</label>
+                    <select name="book_id" required>
+                        <option value="">-- Kitap Secin --</option>
+                        {% for kitap in kitaplar if kitap.available %}
+                        <option value="{{ kitap.book_id }}">{{ kitap.title }} - {{ kitap.author }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn">Odunc Ver</button>
+            </form>
+        </div>
+        
+        <div class="form-card">
+            <h2>Kitap Iade Al</h2>
+            <form method="POST">
+                <input type="hidden" name="islem" value="iade">
+                <div class="form-group">
+                    <label>Uye Secin</label>
+                    <select name="member_id" required>
+                        <option value="">-- Uye Secin --</option>
+                        {% for uye in uyeler %}
+                        <option value="{{ uye.member_id }}">{{ uye.name }} ({{ uye.borrowed_books|length }} kitap)</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Kitap Secin (Odunc Verilenler)</label>
+                    <select name="book_id" required>
+                        <option value="">-- Kitap Secin --</option>
+                        {% for kitap in kitaplar if not kitap.available %}
+                        <option value="{{ kitap.book_id }}">{{ kitap.title }} - {{ kitap.author }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-return">Iade Al</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

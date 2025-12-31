@@ -1,0 +1,103 @@
+{
+  "books": [
+    {
+      "book_id": 1,
+      "title": "a",
+      "author": "aa",
+      "isbn": "aaaa",
+      "publisher": "aaaaa",
+      "year": 1923,
+      "page_count": 412,
+      "category": "41241",
+      "available": true
+    },
+    {
+      "book_id": 3,
+      "title": "selam",
+      "author": "bbbbbbbbbbbbbbb",
+      "isbn": "Bbbbbbbbbbbbbbb",
+      "publisher": "bbbbbbbbbbbbbbb",
+      "year": 1986,
+      "page_count": 212,
+      "category": "bbbbbbbbbbbbbbbbbb",
+      "available": false
+    },
+    {
+      "book_id": 4,
+      "title": "merhaba",
+      "author": "cccccccccccc",
+      "isbn": "ccccccccccccccc",
+      "publisher": "cccccccccccccccc",
+      "year": 1992,
+      "page_count": 63463,
+      "category": "nnnnnnnnnnnnnnn",
+      "available": true
+    },
+    {
+      "book_id": 5,
+      "title": "Test Kitabı 2025",
+      "author": "Test Yazarı",
+      "isbn": "9781234567890",
+      "publisher": "Test Yayınevi",
+      "year": 2025,
+      "page_count": 300,
+      "category": "Roman",
+      "available": true
+    },
+    {
+      "book_id": 6,
+      "title": "aasdasd",
+      "author": "asdasd",
+      "isbn": "9794124124111",
+      "publisher": "asdasd",
+      "year": 1976,
+      "page_count": 242,
+      "category": "asd",
+      "available": true
+    },
+    {
+      "book_id": 8,
+      "title": "merhaba",
+      "author": "selam",
+      "isbn": "9781567541",
+      "publisher": "kostü",
+      "year": 1989,
+      "page_count": 200,
+      "category": "eğitim",
+      "available": true
+    }
+  ],
+  "members": [
+    {
+      "member_id": 1,
+      "name": "Alperen",
+      "phone": "0544 444 4444",
+      "email": "ahmet@blabla.com",
+      "address": "istanbul",
+      "membership_date": "2025-12-15",
+      "borrowed_books": [
+        3
+      ]
+    },
+    {
+      "member_id": 2,
+      "name": "mehmet",
+      "phone": "0555555555",
+      "email": "mehmet@blabla.com",
+      "address": "izmit",
+      "membership_date": "2025-12-15",
+      "borrowed_books": []
+    },
+    {
+      "member_id": 3,
+      "name": "Test Kullanıcı",
+      "phone": "05551234567",
+      "email": "test@test.com",
+      "address": "Test Adresi Istanbul",
+      "membership_date": "2025-12-22",
+      "borrowed_books": []
+    }
+  ],
+  "next_book_id": 9,
+  "next_member_id": 4
+}

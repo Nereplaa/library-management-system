@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uyeler - Kutuphane</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e4e4e4;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header {
+            background: rgba(255,255,255,0.05);
+            padding: 20px 0;
+            margin-bottom: 40px;
+        }
+        header h1 { text-align: center; color: #e94560; }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #e94560, #ff6b6b);
+            border-radius: 25px;
+        }
+        
+        .toolbar { margin-bottom: 30px; }
+        .btn {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn-danger { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .card h3 { color: #e94560; margin-bottom: 15px; }
+        .card p { color: #aaa; margin-bottom: 8px; }
+        .card .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(233,69,96,0.3);
+            border-radius: 15px;
+            margin-top: 10px;
+        }
+        .card-actions { margin-top: 15px; }
+        
+        .flash {
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .flash.success { background: rgba(46,204,113,0.2); border: 1px solid #2ecc71; }
+        .flash.error { background: rgba(231,76,60,0.2); border: 1px solid #e74c3c; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>UYELER</h1>
+            <nav>
+                <a href="/">Ana Sayfa</a>
+                <a href="/kitaplar">Kitaplar</a>
+                <a href="/uyeler">Uyeler</a>
+                <a href="/odunc">Odunc</a>
+                <a href="/arama">Arama</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+        
+        <div class="toolbar">
+            <a href="/uye-ekle" class="btn">[+] Yeni Uye Ekle</a>
+        </div>
+        
+        <div class="cards">
+            {% for uye in uyeler %}
+            <div class="card">
+                <h3>{{ uye.name }}</h3>
+                <p>Tel: {{ uye.phone }}</p>
+                <p>E-posta: {{ uye.email }}</p>
+                <p>Adres: {{ uye.address }}</p>
+                <p>Uyelik: {{ uye.membership_date }}</p>
+                <span class="badge">{{ uye.borrowed_books|length }} Odunc Kitap</span>
+                <div class="card-actions">
+                    <a href="/uye-sil/{{ uye.member_id }}" class="btn btn-danger" 
+                       onclick="return confirm('Silmek istediginize emin misiniz?')">[Sil]</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>
